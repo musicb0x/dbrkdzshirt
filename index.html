@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shirt Me - Custom T-Shirt Designer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .shirt-display {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .shirt-base {
+            width: 100%;
+            display: block;
+            border-radius: 10px;
+        }
+        
+        #textCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+        
+        .controls {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .control-group {
+            margin-bottom: 25px;
+        }
+        
+        h2 {
+            color: #444;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .slider-container {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        #redSlider::-webkit-slider-thumb {
+            background: #ff3b30;
+        }
+        
+        #greenSlider::-webkit-slider-thumb {
+            background: #4cd964;
+        }
+        
+        #blueSlider::-webkit-slider-thumb {
+            background: #007aff;
+        }
+        
+        .color-preview {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .color-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            margin-right: 15px;
+            border: 2px solid #ddd;
+        }
+        
+        .hex-code {
+            font-family: monospace;
+            font-size: 1.1rem;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+            width: 120px;
+        }
+        
+        .reset-btn {
+            background: #4a6cf7;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        
+        .reset-btn:hover {
+            background: #3a5ce5;
+        }
+        
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .shirt-display, .controls {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>DBRKDZ Shirt Customizer</h1>
+        <p class="subtitle">Customize your t-shirt design with color controls</p>
+    </header>
+    
+    <div class="container">
+        <div class="shirt-display">
+            <img src="shirt mu.png" alt="T-Shirt Base" class="shirt-base" id="shirtBase">
+            <canvas id="textCanvas"></canvas>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <h2>Text Color Controls</h2>
+                
+                <div class="slider-container">
+                    <label for="redSlider">Red</label>
+                    <input type="range" id="redSlider" min="0" max="255" value="17">
+                </div>
+                
+                <div class="slider-container">
+                    <label for="greenSlider">Green</label>
+                    <input type="range" id="greenSlider" min="0" max="255" value="217">
+                </div>
+                
+                <div class="slider-container">
+                    <label for="blueSlider">Blue</label>
+                    <input type="range" id="blueSlider" min="0" max="255" value="156">
+                </div>
+                
+                <div class="color-preview">
+                    <div class="color-box" id="colorBox"></div>
+                    <input type="text" class="hex-code" id="hexCode" value="#11D99C" readonly>
+                </div>
+                
+                <button class="reset-btn" id="resetBtn">Reset to Default</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Created for GitHub Pages | Shirt Me Customizer</p>
+    </footer>
+
+    <script>
+        // Get DOM elements
+        const redSlider = document.getElementById('redSlider');
+        const greenSlider = document.getElementById('greenSlider');
+        const blueSlider = document.getElementById('blueSlider');
+        const colorBox = document.getElementById('colorBox');
+        const hexCode = document.getElementById('hexCode');
+        const resetBtn = document.getElementById('resetBtn');
+        const textCanvas = document.getElementById('textCanvas');
+        const ctx = textCanvas.getContext('2d');
+        const shirtBase = document.getElementById('shirtBase');
+        
+        // Store the original text image
+        const textImage = new Image();
+        textImage.src = "shirt mu text.png";
+        
+        // Wait for both images to load
+        let imagesLoaded = 0;
+        
+        function imageLoaded() {
+            imagesLoaded++;
+            if (imagesLoaded === 2) {
+                setupCanvas();
+                updateColor();
+            }
+        }
+        
+        shirtBase.onload = imageLoaded;
+        textImage.onload = imageLoaded;
+        
+        // Set up canvas dimensions
+        function setupCanvas() {
+            textCanvas.width = shirtBase.width;
+            textCanvas.height = shirtBase.height;
+        }
+        
+        // Function to update color
+        function updateColor() {
+            const r = parseInt(redSlider.value);
+            const g = parseInt(greenSlider.value);
+            const b = parseInt(blueSlider.value);
+            
+            // Create hex color code
+            const hex = '#' + 
+                r.toString(16).padStart(2, '0') + 
+                g.toString(16).padStart(2, '0') + 
+                b.toString(16).padStart(2, '0');
+            
+            // Update color box and hex code
+            colorBox.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+            hexCode.value = hex.toUpperCase();
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, textCanvas.width, textCanvas.height);
+            
+            // Draw the text image with color overlay
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.drawImage(textImage, 0, 0, textCanvas.width, textCanvas.height);
+            
+            // Apply color using source-in composition
+            ctx.globalCompositeOperation = 'source-in';
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.fillRect(0, 0, textCanvas.width, textCanvas.height);
+            
+            // Reset composition for next draw
+            ctx.globalCompositeOperation = 'source-over';
+        }
+        
+        // Add event listeners to sliders
+        redSlider.addEventListener('input', updateColor);
+        greenSlider.addEventListener('input', updateColor);
+        blueSlider.addEventListener('input', updateColor);
+        
+        // Reset button functionality
+        resetBtn.addEventListener('click', function() {
+            redSlider.value = 17;
+            greenSlider.value = 217;
+            blueSlider.value = 156;
+            updateColor();
+        });
+        
+        // Initialize with the color from your screenshot (#11D99C)
+        // Set initial values to match the hex code
+        redSlider.value = 17;
+        greenSlider.value = 217;
+        blueSlider.value = 156;
+    </script>
+</body>
+</html>
